@@ -141,18 +141,18 @@ Todo erro retorna um JSON com a mensagem: `{ "message": "..." }`.
 |---|---|---|
 | `POST /plantas` | `400` | Campo faltando ou inválido (por exemplo, `preco` menor ou igual a zero) |
 | `GET /plantas` | `400` | `luminosidade` fora do enum ou `petFriendly` diferente de `true`/`false` |
-| `GET /plantas/:id` | `400` | `id` não é um número inteiro |
+| `GET /plantas/:id` | `400` | `id` não é um número inteiro positivo |
 | | `404` | Planta não existe |
 | `PATCH /plantas/:id` | `400` | `id` inválido ou algum campo enviado inválido |
 | | `404` | Planta não existe |
-| `DELETE /plantas/:id` | `400` | `id` não é um número inteiro |
+| `DELETE /plantas/:id` | `400` | `id` não é um número inteiro positivo |
 | | `404` | Planta não existe |
 | `POST /plantas/:id/venda` | `400` | `id` inválido, `quantidade` inválida ou estoque insuficiente |
 | | `404` | Planta não existe |
 | Qualquer rota | `404` | Rota inexistente (`Rota não encontrada`) |
 | Qualquer rota | `500` | Erro inesperado no servidor |
 
-Nas rotas com `:id` e corpo (`PATCH` e `venda`), a existência da planta é verificada antes do corpo: com id inexistente e corpo inválido, a resposta é `404`.
+No PATCH, a existência da planta é verificada antes do corpo (id inexistente com corpo inválido dá 404). Na venda, o id e a quantidade são validados antes de buscar a planta.
 
 ## Decisões e bônus
 

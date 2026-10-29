@@ -115,7 +115,7 @@ export const readPlantaById = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id)) {
+    if (!Number.isInteger(id) || id <= 0) {
       return res.status(400).json({ message: "id inválido." });
     }
 
@@ -136,7 +136,7 @@ export const updatePlanta = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id)) {
+    if (!Number.isInteger(id) || id <= 0) {
       return res.status(400).json({ message: "id inválido." });
     }
 
@@ -175,7 +175,7 @@ export const deletePlanta = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
-    if (!Number.isInteger(id)) {
+    if (!Number.isInteger(id) || id <= 0) {
       return res.status(400).json({ message: "id inválido." });
     }
 
@@ -197,23 +197,22 @@ export const deletePlanta = async (req: Request, res: Response) => {
 export const sellPlanta = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
+    const { quantidade } = req.body;
 
-    if (!Number.isInteger(id)) {
+    if (!Number.isInteger(id) || id <= 0) {
       return res.status(400).json({ message: "id inválido." });
+    }
+
+    if (!Number.isInteger(quantidade) || quantidade <= 0) {
+      return res.status(400).json({
+        message: "quantidade deve ser um número inteiro maior que zero.",
+      });
     }
 
     const planta = await PlantaRepository.findPlantaById(id);
 
     if (!planta) {
       return res.status(404).json({ message: "Planta não encontrada." });
-    }
-
-    const { quantidade } = req.body;
-
-    if (!Number.isInteger(quantidade) || quantidade <= 0) {
-      return res.status(400).json({
-        message: "quantidade deve ser um número inteiro maior que zero.",
-      });
     }
 
     // A baixa só acontece se houver estoque suficiente (0 = não vendeu)
