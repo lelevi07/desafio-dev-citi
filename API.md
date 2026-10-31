@@ -151,13 +151,3 @@ Todo erro retorna um JSON com a mensagem: `{ "message": "..." }`.
 | | `404` | Planta não existe |
 | Qualquer rota | `404` | Rota inexistente (`Rota não encontrada`) |
 | Qualquer rota | `500` | Erro inesperado no servidor |
-
-No PATCH, a existência da planta é verificada antes do corpo (id inexistente com corpo inválido dá 404). Na venda, o id e a quantidade são validados antes de buscar a planta.
-
-## Decisões e bônus
-
-- **Venda e vendas simultâneas:** a baixa de estoque é feita numa única operação no banco (`updateMany` com a condição `estoque >= quantidade` e `decrement`). Como a verificação e a baixa acontecem juntas, duas vendas simultâneas do último vaso não passam as duas: uma é aplicada e a outra recebe `400` (estoque insuficiente). O estoque nunca fica negativo e uma venda recusada não altera nada.
-- **Id não numérico:** `/plantas/abc` retorna `400` (id inválido), e não `404`, porque o id nem tem formato de número.
-- **Edição vazia:** `PATCH` com corpo vazio retorna `200` com a planta sem alterações.
-- **Preço em centavos:** `preco` e o valor total são inteiros em centavos, para evitar erros de arredondamento com decimais.
-- **Bônus:** nenhum item bônus foi implementado.
